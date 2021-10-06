@@ -6,6 +6,7 @@ import {
   BackgroundGeolocationEvents}
   from '@ionic-native/background-geolocation/ngx';
 import { Platform } from '@ionic/angular';
+import { SignalModel } from './model/signal.model';
 
 declare var window;
 @Component({
@@ -15,19 +16,21 @@ declare var window;
 })
 export class AppComponent {
   arr:any;
-
+  signal:SignalModel;
   constructor(private platform: Platform,
     private backgroundGeolocation: BackgroundGeolocation) {
       this.arr = [];
+      this.signal = new SignalModel(0,0,0,new Date().getTime())
       this.initializeApp();
     }
 
     initializeApp() {
       this.platform.ready().then(() => {
         const config: BackgroundGeolocationConfig = {
-          desiredAccuracy: 10,
-          stationaryRadius: 20,
-          distanceFilter: 30,
+          desiredAccuracy: 0,
+          stationaryRadius: 1,
+          distanceFilter: 1,
+          interval:5000,
           debug: true, 
           stopOnTerminate: false
         }
@@ -35,13 +38,11 @@ export class AppComponent {
         this.backgroundGeolocation.configure(config).then(()=>{
           this.backgroundGeolocation.on(BackgroundGeolocationEvents.location).subscribe(
             (location:BackgroundGeolocationResponse) => {
-              var locationStr = localStorage.getItem("location");
-              if(locationStr == null){
-                this.arr.push(location)
-              } else {
-                var locationarr = JSON.parse(locationStr);
-                this.arr = locationarr;
-              }
+              this.signal.latitude  = location.latitude;
+              this.signal.longitude = location.longitude;
+              this.signal.speed = location.speed;
+              this.signal.time = location.time;
+              this.arr.push(this.signal)
               localStorage.setItem("location", JSON.stringify(this.arr));
           });
         });
