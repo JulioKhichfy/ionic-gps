@@ -28,6 +28,7 @@ export class HomePage {
 
   clearLocations(){
     localStorage.removeItem("location");
+    this.locations =[];
   }
   
 }
