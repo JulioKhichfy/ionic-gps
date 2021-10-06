@@ -6,7 +6,7 @@ import {
   BackgroundGeolocationEvents}
   from '@ionic-native/background-geolocation/ngx';
 import { Platform } from '@ionic/angular';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { SignalModel } from './model/signal.model';
 
 declare var window;
@@ -34,16 +34,21 @@ export class AppComponent implements OnInit{
     async initializeApp() {
       await this.platform.ready();
       this.configure();
-      
+      try{
+        localStorage.removeItem("location");
+      }catch(err){
+        console.log("Garante a limpeza do cache no inicio");
+      }
     }
  
     async configure(){
       const config: BackgroundGeolocationConfig = {
         desiredAccuracy: 0,
-        stationaryRadius: 1,
-        distanceFilter: 1,
+        stationaryRadius: 10,
+        distanceFilter: 10,
         interval:5000,
-        debug: true, 
+        activitiesInterval: 5000,
+        debug: false, 
         stopOnTerminate: false,
         startForeground:true
       }
@@ -55,9 +60,15 @@ export class AppComponent implements OnInit{
             this.signal.longitude = location.longitude;
             this.signal.speed = location.speed;
             this.signal.time = location.time;
-            this.arr.push(this.signal);
-            console.log(JSON.stringify(this.arr));
-            console.log("***********************");
+
+            var locationStr = localStorage.getItem("location");
+            if(locationStr == null){
+              this.arr.push(this.signal)
+            } else {
+              var locationarr = JSON.parse(locationStr);
+              this.arr = locationarr;
+              this.arr.push(this.signal);
+            }
             localStorage.setItem("location", JSON.stringify(this.arr));
             this.signalSubject.next(this.signal);
         });

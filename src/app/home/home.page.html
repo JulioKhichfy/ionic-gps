@@ -1,85 +1,86 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-        Background Geolocation
+        Geolocation
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-button (click)="startBackgroundTracking()" expand="full">
-    Iniciar Background Tracking
-  </ion-button> <br />
+<ion-content>
+  <div class="ion-padding">
+    <ion-button *ngIf='!isStarted' (click)="startBackgroundTracking()" expand="full">
+      Iniciar Tracking
+    </ion-button> <br />
 
-  <ion-button (click)="stopBackgroundTracking()" expand="full">
-    Parar Background Tracking
-  </ion-button> <br />
+    <ion-button *ngIf='isStarted' (click)="stopBackgroundTracking()" expand="full">
+      Parar Tracking
+    </ion-button> <br />
 
-  <ion-list>
-    <ion-list-header>
-      <ion-label>Location Coordinates foreground</ion-label>
-    </ion-list-header>
-    <ion-item>
-      <ion-label>
-        Latitude:
-      </ion-label>
-      <ion-badge color="danger" slot="end">{{foreSignal?.latitude}}</ion-badge>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        Longitude:
-      </ion-label>
-      <ion-badge color="danger" slot="end">{{foreSignal?.longitude}}</ion-badge>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        Velocidade:
-      </ion-label>
-      <ion-badge color="danger" slot="end">{{foreSignal?.speed}} m/s²</ion-badge>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        Time:
-      </ion-label>
-      <ion-badge color="danger" slot="end">{{foreSignal?.time | date:'medium'}}</ion-badge>
-    </ion-item>
-  </ion-list>
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Location Coordinates foreground</ion-label>
+        <br />
+        <ion-label *ngIf='initialFeedback != null'>{{initialFeedback}}</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label>
+          Latitude:
+        </ion-label>
+        <ion-badge color="danger" >{{foreSignal?.latitude}}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Longitude:
+        </ion-label>
+        <ion-badge color="danger" >{{foreSignal?.longitude}}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Velocidade:
+        </ion-label>
+        <ion-badge color="danger" >{{foreSignal?.speed}} m/s²</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Time:
+        </ion-label>
+        <ion-badge color="danger" >{{foreSignal?.time | date:'medium'}}</ion-badge>
+      </ion-item>
+    </ion-list>
 
-  <ion-button (click)="getLocations()" expand="full">
-    Visualizar Rastro
-  </ion-button> <br />
+    <ion-button (click)="getLocations()" expand="full">
+      Visualizar Rastro
+    </ion-button> <br />
 
-  
+    <ion-button (click)="clearLocations()" expand="full">
+      Limpar Rastro
+    </ion-button> <br />
 
-  <ion-button (click)="clearLocations()" expand="full">
-    Limpar Rastro
-  </ion-button> <br />
-
-  <ion-list *ngFor="let location of locations">
-    <ion-item>
-      <ion-label>
-        Latitude:
-      </ion-label>
-      <ion-badge color="danger" slot="end">{{location.latitude}}</ion-badge>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        Longitude:
-      </ion-label>
-      <ion-badge color="danger" slot="end">{{location.longitude}}</ion-badge>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        Velocidade:
-      </ion-label>
-      <ion-badge color="danger" slot="end">{{location.speed}} m/s²</ion-badge>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        Time:
-      </ion-label>
-      <ion-badge color="danger" slot="end">{{location.time | date:'medium'}}</ion-badge>
-    </ion-item>
-  </ion-list>    
-  
+    <ion-list *ngFor="let location of locations">
+      <ion-item>
+        <ion-label>
+          Latitude:
+        </ion-label>
+        <ion-badge color="danger" slot="end">{{location.latitude}}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Longitude:
+        </ion-label>
+        <ion-badge color="danger" slot="end">{{location.longitude}}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Velocidade:
+        </ion-label>
+        <ion-badge color="danger" slot="end">{{location.speed}} m/s²</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Time:
+        </ion-label>
+        <ion-badge color="danger" slot="end">{{location.time | date:'medium'}}</ion-badge>
+      </ion-item>
+    </ion-list>    
+  </div>
 </ion-content>
