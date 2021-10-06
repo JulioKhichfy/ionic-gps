@@ -42,7 +42,9 @@ export class AppComponent {
               this.signal.longitude = location.longitude;
               this.signal.speed = location.speed;
               this.signal.time = location.time;
-              this.arr.push(this.signal)
+              this.arr.push(this.signal);
+              console.log(JSON.stringify(this.arr));
+              console.log("***********************");
               localStorage.setItem("location", JSON.stringify(this.arr));
           });
         });

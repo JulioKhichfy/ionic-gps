@@ -40,13 +40,13 @@
       <ion-label>
         Velocidade:
       </ion-label>
-      <ion-badge color="danger" slot="end">{{location.speed}}</ion-badge>
+      <ion-badge color="danger" slot="end">{{location.speed}} m/s²</ion-badge>
     </ion-item>
     <ion-item>
       <ion-label>
         Time:
       </ion-label>
-      <ion-badge color="danger" slot="end">{{location.time}}</ion-badge>
+      <ion-badge color="danger" slot="end">{{location.time | date:'medium'}}</ion-badge>
     </ion-item>
   </ion-list>    
   

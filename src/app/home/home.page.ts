@@ -24,9 +24,6 @@ export class HomePage {
 
   getLocations(){
     this.locations = (JSON.parse(localStorage.getItem("location")) == null) ? [] : JSON.parse(localStorage.getItem("location"));
-    this.locations.forEach(element => {
-      console.log(JSON.stringify(element))
-    });
   }
 
   clearLocations(){
