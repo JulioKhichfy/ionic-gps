@@ -43,7 +43,7 @@ export class HomePage implements OnInit{
     window.app.backgroundGeolocation.on(BackgroundGeolocationEvents.foreground).subscribe(()=>{
       //FOREGROUND: 1
       console.log("BackgroundGeolocationEvents.foreground")
-      window.app.backgroundGeolocation.switchMode(0);
+      window.app.backgroundGeolocation.switchMode(1);
     });
   }
 
@@ -51,7 +51,15 @@ export class HomePage implements OnInit{
     window.app.backgroundGeolocation.on(BackgroundGeolocationEvents.background).subscribe(()=>{
       //BACKGROUND: 0
       console.log("BackgroundGeolocationEvents.background");
-      window.app.backgroundGeolocation.switchMode(1);
+      window.app.backgroundGeolocation.switchMode(0);
+    });
+  }
+
+  registerStationarySignal(){
+    window.app.backgroundGeolocation.on(BackgroundGeolocationEvents.stationary).subscribe(()=>{
+      //BACKGROUND: 0
+      console.log("BackgroundGeolocationEvents.stationary");
+      
     });
   }
 
@@ -60,6 +68,7 @@ export class HomePage implements OnInit{
     window.app.backgroundGeolocation.start();
     this.registerForeGroundSignal();
     this.registerBackGroundSignal();
+    this.registerStationarySignal();
     this.subscribeSignal();
   }
 
@@ -69,6 +78,7 @@ export class HomePage implements OnInit{
     this.signalSubscription?.unsubscribe();
     window.app.backgroundGeolocation.removeAllListeners(BackgroundGeolocationEvents.background);
     window.app.backgroundGeolocation.removeAllListeners(BackgroundGeolocationEvents.foreground);
+    window.app.backgroundGeolocation.removeAllListeners(BackgroundGeolocationEvents.stationary);
     window.app.backgroundGeolocation.stop();
   }
 
@@ -84,6 +94,7 @@ export class HomePage implements OnInit{
   clearLocations(){
     localStorage.removeItem("location");
     this.locations = [];
+    this.report.quantity = 0;
   }
   
 }
