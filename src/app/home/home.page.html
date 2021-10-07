@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-        Geolocation
+        Geolocation {{counter?.sec}} segundos
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -24,25 +24,25 @@
         <ion-label>
           Latitude:
         </ion-label>
-        <ion-badge color="danger" >{{foreSignal?.latitude}}</ion-badge>
+        <ion-badge color="danger" >{{signal?.latitude}}</ion-badge>
       </ion-item>
       <ion-item>
         <ion-label>
           Longitude:
         </ion-label>
-        <ion-badge color="danger" >{{foreSignal?.longitude}}</ion-badge>
+        <ion-badge color="danger" >{{signal?.longitude}}</ion-badge>
       </ion-item>
       <ion-item>
         <ion-label>
           Velocidade:
         </ion-label>
-        <ion-badge color="danger" >{{foreSignal?.speed}} m/s²</ion-badge>
+        <ion-badge color="danger" >{{signal?.speed}} m/s²</ion-badge>
       </ion-item>
       <ion-item>
         <ion-label>
           Time:
         </ion-label>
-        <ion-badge color="danger" >{{foreSignal?.time | date:'medium'}}</ion-badge>
+        <ion-badge color="danger" >{{signal?.time | date:'medium'}}</ion-badge>
       </ion-item>
     </ion-list>
 
@@ -66,6 +66,12 @@
       </ion-item>
       <ion-item>
         <ion-label>
+          Quantidade de pontos perdidos:
+        </ion-label>
+        <ion-badge color="danger" slot="end">{{report.lostSignals}}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>
           Data Final:
         </ion-label>
         <ion-badge color="danger" slot="end">{{report.initialDate}}</ion-badge>
@@ -77,7 +83,6 @@
         <ion-badge color="danger" slot="end">{{report.finalDate}}</ion-badge>
       </ion-item>
     </ion-list>    
-  
 
     <ion-list *ngFor="let location of locations">
       <ion-item>
