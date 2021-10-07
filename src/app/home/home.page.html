@@ -10,17 +10,15 @@
   <div class="ion-padding">
     <ion-button *ngIf='!isStarted' (click)="startBackgroundTracking()" expand="full">
       Iniciar Tracking
-    </ion-button> <br />
+    </ion-button>
 
     <ion-button *ngIf='isStarted' (click)="stopBackgroundTracking()" expand="full">
       Parar Tracking
-    </ion-button> <br />
+    </ion-button>
 
     <ion-list>
       <ion-list-header>
         <ion-label>Location Coordinates foreground</ion-label>
-        <br />
-        <ion-label *ngIf='initialFeedback != null'>{{initialFeedback}}</ion-label>
       </ion-list-header>
       <ion-item>
         <ion-label>
@@ -55,6 +53,31 @@
     <ion-button (click)="clearLocations()" expand="full">
       Limpar Rastro
     </ion-button> <br />
+    
+    <ion-list *ngIf='report.quantity > 0'>
+      <ion-list-header>
+        <ion-label>Relatatório Background</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label>
+          Quantidade de registros:
+        </ion-label>
+        <ion-badge color="danger" slot="end">{{report.quantity}}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Data Final:
+        </ion-label>
+        <ion-badge color="danger" slot="end">{{report.initialDate}}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Data Inicial:
+        </ion-label>
+        <ion-badge color="danger" slot="end">{{report.finalDate}}</ion-badge>
+      </ion-item>
+    </ion-list>    
+  
 
     <ion-list *ngFor="let location of locations">
       <ion-item>

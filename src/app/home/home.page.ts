@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BackgroundGeolocationEvents } from '@ionic-native/background-geolocation/ngx';
 import { Subscription } from 'rxjs';
+import { ReportModel } from '../model/report.model';
 import { SignalModel } from '../model/signal.model';
 
 declare var window
@@ -10,13 +11,13 @@ declare var window
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit{
-  initialFeedback=null;
+ 
   isStarted:boolean = false;
-  locations:[]
+  locations:SignalModel[]
   foreSignal:SignalModel = new SignalModel(0,0,0,0);
   signalSubscription : Subscription;
   interval:any;
-  
+  report:ReportModel = new ReportModel(0,0,0);
   constructor() {
     this.locations = [];
   }
@@ -26,19 +27,15 @@ export class HomePage implements OnInit{
   }
 
   getCurrentCoordinates() {
-    this.interval = setInterval(()=>{
+    this.interval = setInterval(() => {
       this.foreSignal;
     },5000);
   }
 
   subscribeSignal(){
-    this.signalSubscription = window.app.signalSubject.subscribe((s:SignalModel)=>{
-      this.initialFeedback=null;
-      console.log(JSON.stringify(s));
-      this.foreSignal.latitude = s.latitude;
-      this.foreSignal.longitude = s.longitude;
-      this.foreSignal.time = s.time;
-      this.foreSignal.speed = s.speed;
+    this.signalSubscription = window.app.signalSubject.subscribe((signal:SignalModel)=>{
+      console.log(JSON.stringify(signal));
+      this.foreSignal = signal;
     })
   }
 
@@ -46,7 +43,7 @@ export class HomePage implements OnInit{
     window.app.backgroundGeolocation.on(BackgroundGeolocationEvents.foreground).subscribe(()=>{
       //FOREGROUND: 1
       console.log("BackgroundGeolocationEvents.foreground")
-      window.app.backgroundGeolocation.switchMode(1);
+      window.app.backgroundGeolocation.switchMode(0);
     });
   }
 
@@ -54,30 +51,34 @@ export class HomePage implements OnInit{
     window.app.backgroundGeolocation.on(BackgroundGeolocationEvents.background).subscribe(()=>{
       //BACKGROUND: 0
       console.log("BackgroundGeolocationEvents.background");
-      window.app.backgroundGeolocation.switchMode(0);
+      window.app.backgroundGeolocation.switchMode(1);
     });
   }
 
   startBackgroundTracking(){
-    this.initialFeedback="Aguarde o primeiro sinal...";
     this.isStarted = true;
     window.app.backgroundGeolocation.start();
     this.registerForeGroundSignal();
     this.registerBackGroundSignal();
     this.subscribeSignal();
-    
   }
 
   stopBackgroundTracking(){
-    window.app.backgroundGeolocation.stop();
     this.isStarted = false;
     clearInterval(this.interval);
     this.signalSubscription?.unsubscribe();
+    window.app.backgroundGeolocation.removeAllListeners(BackgroundGeolocationEvents.background);
+    window.app.backgroundGeolocation.removeAllListeners(BackgroundGeolocationEvents.foreground);
+    window.app.backgroundGeolocation.stop();
   }
 
   getLocations(){
     this.locations = (JSON.parse(localStorage.getItem("location")) == null) ? [] : JSON.parse(localStorage.getItem("location"));
-    console.log("size localstorage " + this.locations.length)
+    this.report.quantity = this.locations.length;
+    let finalDate = new Date(this.locations[0].time);
+    let initialDate = new Date(this.locations[this.locations.length -1].time);
+    this.report.initialDate = initialDate.getHours()+":"+initialDate.getMinutes()+":"+initialDate.getSeconds();
+    this.report.finalDate = finalDate.getHours()+":"+finalDate.getMinutes()+":"+finalDate.getSeconds();
   }
 
   clearLocations(){

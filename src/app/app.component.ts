@@ -47,8 +47,8 @@ export class AppComponent implements OnInit{
         stationaryRadius: 10,
         distanceFilter: 10,
         interval:5000,
-        activitiesInterval: 5000,
-        debug: false, 
+        //activitiesInterval: 5000,
+        debug: true, 
         stopOnTerminate: false,
         startForeground:true
       }
